@@ -1,5 +1,7 @@
 package com.yusuf.paparafinalcase.presentation.foodScreen
 
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -33,6 +37,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.yusuf.paparafinalcase.R
 import com.yusuf.paparafinalcase.data.remote.responses.recipe.Recipe
 import com.yusuf.paparafinalcase.data.remote.responses.searchRecipe.Result
+import com.yusuf.paparafinalcase.presentation.components.LazyColumnRecipeItem
 import com.yusuf.paparafinalcase.presentation.components.LoadingLottie
 import com.yusuf.paparafinalcase.presentation.foodScreen.viewmodel.FoodScreenViewModel
 import com.yusuf.paparafinalcase.presentation.foodScreen.viewmodel.RandomFoodState
@@ -40,12 +45,16 @@ import com.yusuf.paparafinalcase.presentation.foodScreen.viewmodel.SearchRecipeS
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FoodScreen (viewModel: FoodScreenViewModel = hiltViewModel()) {
+fun FoodScreen (navController: NavController,category: String,viewModel: FoodScreenViewModel = hiltViewModel()) {
 
     val randomFoodState by viewModel.rootRandomFoodResponse.collectAsState(RandomFoodState())
     val searchRecipeState by viewModel.rootSearchRecipeResponse.collectAsState(SearchRecipeState())
 
     var searchQuery by remember { mutableStateOf("") }
+
+    LaunchedEffect(key1 = true) {
+        Log.i("Category", "FoodScreen: $category")
+    }
 
     if (randomFoodState.error != null){
         Column(
@@ -115,7 +124,9 @@ fun FoodScreen (viewModel: FoodScreenViewModel = hiltViewModel()) {
                         if (!searchResults.isNullOrEmpty()) {
                             items(searchResults.size) { index ->
                                 val searchRecipe = searchResults[index]
-                                SearchFoodItem(searchRecipe)
+                                SearchFoodItem(searchRecipe){
+                                    navController.navigate("recipe_detail_page/${searchRecipe.id}")
+                                }
                             }
                         }
                         else {
@@ -123,7 +134,9 @@ fun FoodScreen (viewModel: FoodScreenViewModel = hiltViewModel()) {
                             if (!randomRecipes.isNullOrEmpty()) {
                                 items(randomRecipes.size) { index ->
                                     val randomRecipe = randomRecipes[index]
-                                    RandomFoodItem(randomRecipe)
+                                    RandomFoodItem(randomRecipe){
+                                        navController.navigate("recipe_detail_page/${randomRecipe.id}")
+                                    }
                                 }
                             }
                         }
@@ -138,50 +151,12 @@ fun FoodScreen (viewModel: FoodScreenViewModel = hiltViewModel()) {
 
 
 @Composable
-fun RandomFoodItem(randomFood: Recipe) {
-    LazyRowRecipeItem(image = randomFood.image, title = randomFood.title)
+fun RandomFoodItem(randomFood: Recipe,onCardClick: () ->Unit) {
+    LazyColumnRecipeItem(image = randomFood.image, title = randomFood.title,onCardClick)
 }
 
 @Composable
-fun SearchFoodItem(searchFood: Result) {
-    LazyRowRecipeItem(image = searchFood.image, title = searchFood.title)
+fun SearchFoodItem(searchFood: Result,onCardClick: () ->Unit) {
+    LazyColumnRecipeItem(image = searchFood.image, title = searchFood.title,onCardClick)
 }
 
-@Composable
-fun LazyRowRecipeItem(image:String, title:String){
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_food_image_lottie))
-
-    Card(
-        Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-    ) {
-        Row(
-            Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            SubcomposeAsyncImage(
-                model = image,
-                contentDescription = null,
-                modifier = Modifier.size(100.dp, 100.dp),
-                loading = {
-                    LottieAnimation(
-                        composition,
-                        modifier = Modifier.size(100.dp),
-                        iterations = Int.MAX_VALUE
-                    )
-                }
-            )
-
-            Text(
-                text = title,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        }
-    }
-}

@@ -1,6 +1,6 @@
 package com.yusuf.paparafinalcase.data.remote.network
 
-import com.yusuf.paparafinalcase.core.constants.Utils.API_KEY
+import com.yusuf.paparafinalcase.core.constants.ApiUtils.API_KEY
 import com.yusuf.paparafinalcase.data.remote.responses.recipe.RandomRecipeRoot
 import com.yusuf.paparafinalcase.data.remote.responses.recipe.RecipeInfoRoot
 import com.yusuf.paparafinalcase.data.remote.responses.searchRecipe.SearchRecipeRoot
