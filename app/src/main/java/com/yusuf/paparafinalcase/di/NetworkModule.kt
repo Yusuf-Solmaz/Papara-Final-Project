@@ -1,6 +1,6 @@
 package com.yusuf.paparafinalcase.di
 
-import com.yusuf.paparafinalcase.core.constants.Utils.BASE_URL
+import com.yusuf.paparafinalcase.core.constants.ApiUtils.BASE_URL
 import com.yusuf.paparafinalcase.data.remote.network.ApiService
 import dagger.Module
 import dagger.Provides
