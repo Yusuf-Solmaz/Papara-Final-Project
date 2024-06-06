@@ -23,7 +23,6 @@ import com.yusuf.paparafinalcase.R
 
 @Composable
 fun LazyColumnRecipeItem(image: String, title: String, onCardClick: () -> Unit) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_food_image_lottie))
 
     Card(
         Modifier
@@ -38,18 +37,8 @@ fun LazyColumnRecipeItem(image: String, title: String, onCardClick: () -> Unit) 
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            SubcomposeAsyncImage(
-                model = image,
-                contentDescription = null,
-                modifier = Modifier.size(100.dp, 100.dp),
-                loading = {
-                    LottieAnimation(
-                        composition,
-                        modifier = Modifier.size(100.dp),
-                        iterations = Int.MAX_VALUE
-                    )
-                }
-            )
+            
+            AsyncImage(image = image)
 
             Text(
                 text = title,
@@ -59,4 +48,22 @@ fun LazyColumnRecipeItem(image: String, title: String, onCardClick: () -> Unit) 
             )
         }
     }
+}
+
+@Composable
+fun AsyncImage(image: String){
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_food_image_lottie))
+
+    SubcomposeAsyncImage(
+        model = image,
+        contentDescription = null,
+        modifier = Modifier.size(100.dp, 100.dp),
+        loading = {
+            LottieAnimation(
+                composition,
+                modifier = Modifier.size(100.dp),
+                iterations = Int.MAX_VALUE
+            )
+        }
+    )
 }
