@@ -45,7 +45,7 @@ import com.yusuf.paparafinalcase.presentation.foodScreen.viewmodel.SearchRecipeS
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FoodScreen (navController: NavController,category: String,viewModel: FoodScreenViewModel = hiltViewModel()) {
+fun FoodScreen (navController: NavController,category: String?,viewModel: FoodScreenViewModel = hiltViewModel()) {
 
     val randomFoodState by viewModel.rootRandomFoodResponse.collectAsState(RandomFoodState())
     val searchRecipeState by viewModel.rootSearchRecipeResponse.collectAsState(SearchRecipeState())
