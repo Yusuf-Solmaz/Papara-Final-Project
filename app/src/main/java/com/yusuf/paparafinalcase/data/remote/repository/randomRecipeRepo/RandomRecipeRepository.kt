@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class RandomRecipeRepository @Inject constructor(val apiService: ApiService) {
 
-    fun getRandomRecipes() = rootFlow {
-        apiService.getRandomRecipes()
+    fun getRandomRecipes(number:Int) = rootFlow {
+        apiService.getRandomRecipes(number = number)
     }
 
 }

@@ -2,6 +2,7 @@ package com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yusuf.paparafinalcase.core.rootResult.RootResult
 import com.yusuf.paparafinalcase.data.remote.repository.randomRecipeRepo.RandomRecipeRepository
 import com.yusuf.paparafinalcase.data.remote.repository.searchRecipeRepository.SearchRecipeRepository
@@ -14,10 +15,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(private val searchRecipeRepository: SearchRecipeRepository) : ViewModel() {
+class MainScreenViewModel @Inject constructor(private val searchRecipeRepository: SearchRecipeRepository,val randomRecipeRepository: RandomRecipeRepository) : ViewModel() {
 
     private val _rootMainSearchRecipeResponse = MutableStateFlow(MainSearchRecipeState())
     val rootMainSearchRecipeResponse: Flow<MainSearchRecipeState> = _rootMainSearchRecipeResponse
+
+    private val _rootRandomFoodResponse = MutableStateFlow(MainRandomFoodState())
+    val rootRandomFoodResponse: Flow<MainRandomFoodState> = _rootRandomFoodResponse
 
     fun searchRecipe(query: String, diet: String?, cuisine: String?) {
         viewModelScope.launch {
@@ -45,6 +49,42 @@ class MainScreenViewModel @Inject constructor(private val searchRecipeRepository
 
                     is RootResult.Success -> {
                         _rootMainSearchRecipeResponse.update {
+                            it.copy(
+                                rootResponse = result.data,
+                                isLoading = false,
+                                error = null
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getOneRandomFood(){
+        viewModelScope.launch {
+            randomRecipeRepository.getRandomRecipes(1).collect{
+                result ->
+                when(result){
+                    is RootResult.Error -> {
+                        _rootRandomFoodResponse.update {
+                            it.copy(
+                                error = result.message,
+                                isLoading = false,
+                                rootResponse = null
+                            )
+                        }
+                    }
+                    RootResult.Loading -> {
+                        _rootRandomFoodResponse.update {
+                            it.copy(
+                                isLoading = true,
+                                rootResponse = null,
+                                error = null)
+                        }
+                    }
+                    is RootResult.Success -> {
+                        _rootRandomFoodResponse.update {
                             it.copy(
                                 rootResponse = result.data,
                                 isLoading = false,
