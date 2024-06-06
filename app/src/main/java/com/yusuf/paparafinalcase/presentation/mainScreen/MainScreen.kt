@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,17 +29,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.SubcomposeAsyncImage
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.yusuf.paparafinalcase.R
 import com.yusuf.paparafinalcase.core.constants.Constants.categories
 import com.yusuf.paparafinalcase.core.constants.Constants.categoryImages
+import com.yusuf.paparafinalcase.data.remote.responses.recipe.RandomRecipeRoot
+import com.yusuf.paparafinalcase.presentation.components.AsyncImage
 import com.yusuf.paparafinalcase.presentation.components.LazyColumnRecipeItem
 import com.yusuf.paparafinalcase.presentation.components.LoadingLottie
+import com.yusuf.paparafinalcase.presentation.favoriteFoodScreen.FavoriteFoodScreen
+import com.yusuf.paparafinalcase.presentation.foodScreen.FoodScreen
+import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainRandomFoodState
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainScreenViewModel
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainSearchRecipeState
+import com.yusuf.paparafinalcase.ui.theme.Orange
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +60,15 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
     var searchQuery by remember { mutableStateOf("") }
 
     val mainSearchRecipeState by viewModel.rootMainSearchRecipeResponse.collectAsState(MainSearchRecipeState())
+    val randomFoodState by viewModel.rootRandomFoodResponse.collectAsState(MainRandomFoodState())
+
+
+    val items = listOf("Home", "Search","Favorite")
+    val choosenItem = remember { mutableStateOf(0) }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.getOneRandomFood()
+    }
 
     Scaffold(
         topBar = {
@@ -60,55 +82,93 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
             )
         },
         content = { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                SearchBar(
-                    stateValue = searchQuery,
-                    onValueChange = { updatedQuery -> searchQuery = updatedQuery },
-                    label = "Search Recipes",
-                    isSearching = isSearching,
-                    onSearchClicked = {
-                        isSearching = !isSearching
-                        if (isSearching) {
+            if (choosenItem.value == 0){
+                Column(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    SearchBar(
+                        stateValue = searchQuery,
+                        onValueChange = { updatedQuery -> searchQuery = updatedQuery },
+                        label = "Search Recipes",
+                        isSearching = isSearching,
+                        onSearchClicked = {
+                            isSearching = !isSearching
+                            if (isSearching) {
+                                viewModel.searchRecipe(query = searchQuery, null, null)
+                            }
+                        },
+                        onSearching = {
                             viewModel.searchRecipe(query = searchQuery, null, null)
+                        },
+                        onClearSearch = {
+                            isSearching = false
+                            searchQuery = ""
                         }
-                    },
-                    onSearching = {
-                        viewModel.searchRecipe(query = searchQuery, null, null)
-                    },
-                    onClearSearch = {
-                        isSearching = false
-                        searchQuery = ""
-                    }
-                )
-                if (isSearching) {
-                    if (mainSearchRecipeState.isLoading) {
-                        LoadingLottie(R.raw.general_loading_lottie)
-                    } else if (mainSearchRecipeState.error != null) {
-                        Text(text = mainSearchRecipeState.error.toString())
-                    } else {
-                        mainSearchRecipeState.rootResponse?.let { searchRecipeRoot ->
-                            LazyColumn {
-                                items(searchRecipeRoot.results) { result ->
-                                    LazyColumnRecipeItem(
-                                        image = result.image,
-                                        title = result.title,
-                                        onCardClick = {
-                                            navController.navigate("recipe_detail_page/${result.id}")
-                                        }
-                                    )
+                    )
+                    if (isSearching) {
+                        if (mainSearchRecipeState.isLoading) {
+                            LoadingLottie(R.raw.general_loading_lottie)
+                        } else if (mainSearchRecipeState.error != null) {
+                            Text(text = mainSearchRecipeState.error.toString())
+                        } else {
+                            mainSearchRecipeState.rootResponse?.let { searchRecipeRoot ->
+                                LazyColumn {
+                                    items(searchRecipeRoot.results) { result ->
+                                        LazyColumnRecipeItem(
+                                            image = result.image,
+                                            title = result.title,
+                                            onCardClick = {
+                                                navController.navigate("recipe_detail_page/${result.id}")
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }
+                    } else {
+                        PremiumPromotion()
+                        CategorySection(navController)
+                        if (randomFoodState.rootResponse != null){
+                            Recommendations(randomFoodState,navController)
+                        }
+
                     }
-                } else {
-                    PremiumPromotion()
-                    CategorySection(navController)
-                    Recommendations()
+                }
+            }
+            if (choosenItem.value == 1){
+                FoodScreen(navController = navController, category = null)
+            }
+            if (choosenItem.value == 2){
+                FavoriteFoodScreen()
+            }
+
+        },
+        bottomBar = {
+            NavigationBar(
+            ) {
+                items.forEachIndexed { index, item ->
+                    NavigationBarItem(
+                        selected = choosenItem.value == index,
+                        onClick = { choosenItem.value = index },
+                        colors = NavigationBarItemDefaults.colors(
+                          selectedIconColor = Orange,
+                          selectedTextColor = Orange,
+                            indicatorColor = MaterialTheme.colorScheme.surfaceColorAtElevation(LocalAbsoluteTonalElevation.current)
+                        ),
+                        icon = {
+                            when(item){
+                                "Home" -> {Icon(painter = painterResource(id = R.drawable.home), contentDescription = null)}
+                                "Search" -> {Icon(painter = painterResource(id = R.drawable.search), contentDescription = null)}
+                                "Favorite" -> {Icon(painter = painterResource(id = R.drawable.favorite), contentDescription = null)}
+                            }
+
+                        },
+                        label = { Text(item) }
+
+                    )
                 }
             }
         }
@@ -275,42 +335,74 @@ fun CategoryItem(category: String, navController: NavController, onClick: (Strin
 }
 
 @Composable
-fun Recommendations() {
-    Column {
-        Text(text = "Recommendation for vegan", style = MaterialTheme.typography.displaySmall)
-        // Dummy data for recommendations
-        val recommendations = listOf(
-            "Ginger roasted tomato",
-            "Rice pudding topped with cinnamon"
-        )
-        recommendations.forEach { title ->
-            RecommendationItem(title = title)
-        }
-    }
-}
+fun Recommendations(randomFoodState:MainRandomFoodState,navController: NavController) {
+    val randomFood = randomFoodState.rootResponse!!
+    val randomRecipe = randomFood.recipes[0]
 
-@Composable
-fun RecommendationItem(title: String) {
-    Card(
-        modifier = Modifier
+    if (randomFoodState.isLoading){
+        Card(modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            .padding(vertical = 8.dp)) {
+            LoadingLottie(R.raw.general_loading_lottie)
+        }
+        LoadingLottie(R.raw.general_loading_lottie)
+    }
+    if (randomFoodState.error != null){
+        Text(text = randomFoodState.error.toString())
+    }
+    else{
+
+    Column {
+        Text(text = "Daily Recommendation", style = MaterialTheme.typography.displaySmall)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .clickable {
+                    navController.navigate("recipe_detail_page/${randomRecipe.id}")
+                }
         ) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .background(MaterialTheme.colorScheme.primary)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column {
-                Text(text = title, style = MaterialTheme.typography.bodyLarge)
-                Text(text = "by Chef Name", style = MaterialTheme.typography.bodyMedium)
+            Box {
+
+                val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_food_image_lottie))
+
+                SubcomposeAsyncImage(
+                    model = randomRecipe.image,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    loading = {
+                        LottieAnimation(
+                            composition,
+                            modifier = Modifier.size(100.dp),
+                            iterations = Int.MAX_VALUE
+                        )
+                    }
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.3f))
+                )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = randomRecipe.title,
+                        color = Color.White,
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            color = Color.White
+                        )
+                    )
+                }
             }
         }
     }
+    }
 }
+
 
