@@ -66,7 +66,7 @@ class FoodScreenViewModel @Inject constructor(private val randomRecipeRepository
 
             private fun getRandomFoods() {
                 viewModelScope.launch {
-                    randomRecipeRepository.getRandomRecipes().collect { result ->
+                    randomRecipeRepository.getRandomRecipes(10).collect { result ->
                         when (result) {
                             is RootResult.Error -> {
                                 _rootRandomFoodResponse.update {
