@@ -22,7 +22,7 @@ import com.yusuf.paparafinalcase.R
 
 
 @Composable
-fun LazyColumnRecipeItem(image: String, title: String, onCardClick: () -> Unit) {
+fun LazyColumnRecipeItem(image: String?, title: String, onCardClick: () -> Unit) {
 
     Card(
         Modifier
@@ -38,7 +38,7 @@ fun LazyColumnRecipeItem(image: String, title: String, onCardClick: () -> Unit) 
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             
-            AsyncImage(image = image)
+            image?.let { AsyncImage(image = it) }
 
             Text(
                 text = title,
