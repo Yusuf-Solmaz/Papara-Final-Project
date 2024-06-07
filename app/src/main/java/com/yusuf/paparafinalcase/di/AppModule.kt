@@ -1,6 +1,7 @@
 package com.yusuf.paparafinalcase.di
 
 import com.yusuf.paparafinalcase.data.remote.network.ApiService
+import com.yusuf.paparafinalcase.data.remote.repository.getRecipeInformations.GetRecipeInformations
 import com.yusuf.paparafinalcase.data.remote.repository.randomRecipeRepo.RandomRecipeRepository
 import com.yusuf.paparafinalcase.data.remote.repository.searchRecipeRepository.SearchRecipeRepository
 import dagger.Module
@@ -21,5 +22,11 @@ object AppModule {
     fun provideSearchRecipeRepository(apiService: ApiService): SearchRecipeRepository {
         return SearchRecipeRepository(apiService)
     }
+
+    @Provides
+    fun provideGetRecipeInformation(apiService: ApiService): GetRecipeInformations {
+        return GetRecipeInformations(apiService)
+    }
+
 
 }
