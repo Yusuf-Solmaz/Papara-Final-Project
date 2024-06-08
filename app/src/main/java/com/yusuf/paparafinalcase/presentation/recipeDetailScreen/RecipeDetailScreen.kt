@@ -1,6 +1,7 @@
 package com.yusuf.paparafinalcase.presentation.recipeDetailScreen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -85,6 +86,7 @@ fun RecipeDetailScreen(navController: NavController,recipeId: Int, viewModel: Re
 
     LaunchedEffect(key1 = recipeId) {
         viewModel.getRecipeInformation(id = recipeId)
+        Log.d("RecipeDetailScreen", "LaunchedEffect: $recipeId")
     }
     if (foodState.isLoading){
        LoadingLottie(resId = R.raw.general_loading_lottie)
@@ -115,7 +117,7 @@ fun RecipeDetailScreen(navController: NavController,recipeId: Int, viewModel: Re
                                 tint = Color.Red,
                                 painter = painterResource(id = if (isFavorite) R.drawable.fav_food else R.drawable.not_fav_food),
                                 contentDescription = null,
-                                modifier = Modifier.clickable {
+                                modifier = Modifier.padding(end = 10.dp, start = 10.dp).clickable {
                                     foodState.rootResponse?.toLocalFoods()?.let { viewModel.addOrRemoveFavorite(it) }
                                 }
                             )
