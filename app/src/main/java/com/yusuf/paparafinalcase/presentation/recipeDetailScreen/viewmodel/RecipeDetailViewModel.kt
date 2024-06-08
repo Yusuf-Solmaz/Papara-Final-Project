@@ -6,6 +6,7 @@ import com.yusuf.paparafinalcase.core.rootResult.RootResult
 import com.yusuf.paparafinalcase.data.local.dao.FoodDao
 import com.yusuf.paparafinalcase.data.local.model.LocalFoods
 import com.yusuf.paparafinalcase.data.remote.repository.getRecipeInformations.GetRecipeInformations
+import com.yusuf.paparafinalcase.data.remote.responses.recipe.AnalyzedInstruction
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainRandomFoodState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecipeDetailViewModel @Inject constructor(val repository: GetRecipeInformations,private val foodDao: FoodDao): ViewModel(){
+class RecipeDetailViewModel @Inject constructor(val repository: GetRecipeInformations, private val foodDao: FoodDao): ViewModel() {
 
     private val _rootRecipeInformationResponse = MutableStateFlow(RecipeDetailState())
     val rootRecipeInformationResponse: Flow<RecipeDetailState> = _rootRecipeInformationResponse
@@ -23,13 +24,10 @@ class RecipeDetailViewModel @Inject constructor(val repository: GetRecipeInforma
     private val _isFavorite = MutableStateFlow(false)
     val isFavorite: Flow<Boolean> = _isFavorite
 
-
-
-    fun getRecipeInformation(id: Int){
+    fun getRecipeInformation(id: Int) {
         viewModelScope.launch {
-            repository.getRecipeInformations(id).collect{
-                result ->
-                when(result){
+            repository.getRecipeInformations(id).collect { result ->
+                when(result) {
                     is RootResult.Error -> {
                         _rootRecipeInformationResponse.update {
                             it.copy(
@@ -49,16 +47,27 @@ class RecipeDetailViewModel @Inject constructor(val repository: GetRecipeInforma
                         }
                     }
                     is RootResult.Success -> {
-                        _rootRecipeInformationResponse.update { it.copy(
-                            isLoading =  false,
-                            rootResponse = result.data,
-                            error = null
+                        val parsedInstructions = result.data?.let { parseInstructions(it.analyzedInstructions) }
+                        val updatedRootResponse = parsedInstructions?.let { result.data.copy(instructions = it) }
+
+                        _rootRecipeInformationResponse.update {
+                            it.copy(
+                                isLoading = false,
+                                rootResponse = updatedRootResponse,
+                                error = null
                             )
                         }
                         checkIfFavorite(id)
                     }
                 }
             }
+        }
+    }
+
+    private fun parseInstructions(analyzedInstructions: List<AnalyzedInstruction>): String {
+        val steps = analyzedInstructions.flatMap { it.steps }
+        return steps.joinToString(separator = "\n") { step ->
+            "${step.number}. ${step.step}"
         }
     }
 
