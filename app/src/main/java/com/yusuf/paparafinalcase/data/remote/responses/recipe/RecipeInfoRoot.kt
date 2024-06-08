@@ -20,7 +20,7 @@ data class RecipeInfoRoot(
     val instructions: String,
     val lowFodmap: Boolean,
     val occasions: List<String>,
-    val originalId: Any,
+    val originalId: Any?,
     val preparationMinutes: Int,
     val pricePerServing: Double,
     val readyInMinutes: Int,
