@@ -142,7 +142,7 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
                 FoodScreen(navController = navController, category = null)
             }
             if (choosenItem.value == 2){
-                FavoriteFoodScreen()
+                FavoriteFoodScreen(navController)
             }
 
         },
