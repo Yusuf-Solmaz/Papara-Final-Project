@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -63,6 +64,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.yusuf.paparafinalcase.R
+import com.yusuf.paparafinalcase.data.mapper.toLocalFoods
 import com.yusuf.paparafinalcase.data.remote.responses.recipe.ExtendedIngredient
 import com.yusuf.paparafinalcase.data.remote.responses.recipe.Ingredient
 import com.yusuf.paparafinalcase.presentation.components.AsyncImage
@@ -79,6 +81,7 @@ import kotlinx.coroutines.launch
 fun RecipeDetailScreen(navController: NavController,recipeId: Int, viewModel: RecipeDetailViewModel = hiltViewModel()) {
 
     val foodState by viewModel.rootRecipeInformationResponse.collectAsState(RecipeDetailState())
+    val isFavorite by viewModel.isFavorite.collectAsState(false)
 
     LaunchedEffect(key1 = recipeId) {
         viewModel.getRecipeInformation(id = recipeId)
@@ -102,10 +105,20 @@ fun RecipeDetailScreen(navController: NavController,recipeId: Int, viewModel: Re
                         }
                     },
                     actions = {
-                        Column(modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(end = 10.dp), verticalArrangement = Arrangement.Center) {
-                            Icon(painter = painterResource(id = R.drawable.not_fav_food), contentDescription = "")
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .padding(end = 10.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                tint = Color.Red,
+                                painter = painterResource(id = if (isFavorite) R.drawable.fav_food else R.drawable.not_fav_food),
+                                contentDescription = null,
+                                modifier = Modifier.clickable {
+                                    foodState.rootResponse?.toLocalFoods()?.let { viewModel.addOrRemoveFavorite(it) }
+                                }
+                            )
                         }
                     }
                 )
