@@ -21,4 +21,8 @@ interface FoodDao {
 
     @Query("DELETE FROM foods WHERE foodId = :foodId")
     suspend fun deleteFood(foodId: Int)
+
+    @Query("SELECT * FROM foods WHERE foodId = :foodId")
+    suspend fun getFoodById(foodId: Int): LocalFoods?
+
 }
