@@ -264,8 +264,7 @@ fun FoodScreen(navController: NavController, category: String?, viewModel: FoodS
 
                                 Button(
                                     onClick = {
-                                        viewModel.searchRecipe(searchQuery,
-                                            selectedCuisine?.lowercase(Locale.getDefault()), selectedDiet)
+                                        viewModel.searchRecipe(query = searchQuery, diet = selectedDiet, cuisine = selectedCuisine?.lowercase(Locale.getDefault()))
                                         isSheetOpen = false
                                     },
                                     modifier = Modifier
