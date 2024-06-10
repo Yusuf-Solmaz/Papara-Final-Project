@@ -17,5 +17,6 @@ data class LocalFoods(
     var cookingMinutes: Int,
     var servings: Int,
     var aggregateLikes: Int,
-    var instructions: String
+    var instructions: String,
+    var ingredients: String
 )
