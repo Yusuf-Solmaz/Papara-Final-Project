@@ -42,8 +42,6 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.yusuf.paparafinalcase.R
 import com.yusuf.paparafinalcase.core.constants.Constants.categories
 import com.yusuf.paparafinalcase.core.constants.Constants.categoryImages
-import com.yusuf.paparafinalcase.data.remote.responses.recipe.RandomRecipeRoot
-import com.yusuf.paparafinalcase.presentation.components.AsyncImage
 import com.yusuf.paparafinalcase.presentation.components.LazyColumnRecipeItem
 import com.yusuf.paparafinalcase.presentation.components.LoadingLottie
 import com.yusuf.paparafinalcase.presentation.favoriteFoodScreen.FavoriteFoodScreen
@@ -64,7 +62,7 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
 
 
     val items = listOf("Home", "Search","Favorite")
-    val choosenItem = remember { mutableStateOf(0) }
+    val chosenItem = remember { mutableStateOf(0) }
 
     LaunchedEffect(key1 = true) {
         viewModel.getOneRandomFood()
@@ -72,8 +70,14 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
 
     Scaffold(
         topBar = {
+            val title = when (chosenItem.value) {
+                0 -> "Food App"
+                1 -> "Search Food"
+                2 -> "Favorite Foods"
+                else -> "Food App"
+            }
             TopAppBar(
-                title = { Text(text = "Food App") },
+                title = { Text(text = title) },
                 actions = {
                     IconButton(onClick = {}) {
                         Icon(Icons.Default.AccountCircle, contentDescription = null)
@@ -82,7 +86,7 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
             )
         },
         content = { paddingValues ->
-            if (choosenItem.value == 0){
+            if (chosenItem.value == 0){
                 Column(
                     modifier = Modifier
                         .padding(paddingValues)
@@ -138,10 +142,10 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
                     }
                 }
             }
-            if (choosenItem.value == 1){
+            if (chosenItem.value == 1){
                 FoodScreen(navController = navController, category = null)
             }
-            if (choosenItem.value == 2){
+            if (chosenItem.value == 2){
                 FavoriteFoodScreen(navController)
             }
 
@@ -151,8 +155,8 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
             ) {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
-                        selected = choosenItem.value == index,
-                        onClick = { choosenItem.value = index },
+                        selected = chosenItem.value == index,
+                        onClick = { chosenItem.value = index },
                         colors = NavigationBarItemDefaults.colors(
                           selectedIconColor = Orange,
                           selectedTextColor = Orange,
