@@ -29,12 +29,12 @@ class FavoriteFoodViewModel @Inject constructor(private val foodDao: FoodDao) : 
             try {
                 foodDao.getFoods().collect { favoriteFoods ->
                     _favoriteFoodsState.update {
-                        it.copy(isLoading = false, favoriteFoods = favoriteFoods)
+                        it.copy(isLoading = false, favoriteFoods = favoriteFoods, error = null)
                     }
                 }
             } catch (e: Exception) {
                 _favoriteFoodsState.update {
-                    it.copy(isLoading = false, error = e.message)
+                    it.copy(isLoading = false, error = e.message, favoriteFoods = emptyList())
                 }
             }
         }
@@ -47,7 +47,7 @@ class FavoriteFoodViewModel @Inject constructor(private val foodDao: FoodDao) : 
                 fetchFavoriteFoods()
             } catch (e: Exception) {
                 _favoriteFoodsState.update {
-                    it.copy(error = e.message)
+                    it.copy(error = e.message, favoriteFoods = emptyList(), isLoading = false)
                 }
             }
         }
