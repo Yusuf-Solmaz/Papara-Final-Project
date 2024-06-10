@@ -32,6 +32,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -68,48 +69,49 @@ import com.yusuf.paparafinalcase.ui.theme.White
 fun FavoriteFoodScreen(navController: NavController, viewModel: FavoriteFoodViewModel = hiltViewModel()) {
     val state by viewModel.favoriteFoodsState.collectAsState(FavoriteFoodState())
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Favorite Foods",
-            style = MaterialTheme.typography.displayMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+    Scaffold (
+        content = {
+            paddingValues ->
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-        when {
-            state.isLoading -> {
-                LoadingLottie(resId = R.raw.general_loading_lottie)
-            }
-            state.error != null -> {
-                Text(text = state.error ?: "An error occurred")
-            }
-            state.favoriteFoods.isEmpty() -> {
-                Text(text = "No favorite foods found")
-            }
-            else -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 8.dp)
-                ) {
-                    items(state.favoriteFoods) { food ->
-                        ExpandableCard(
-                            food = food,
-                            onDeleted = { viewModel.deleteFavoriteFood(it.foodId) },
-                            navController = navController
-                        )
+                when {
+                    state.isLoading -> {
+                        LoadingLottie(resId = R.raw.general_loading_lottie)
+                    }
+                    state.error != null -> {
+                        Text(text = state.error ?: "An error occurred")
+                    }
+                    state.favoriteFoods.isEmpty() -> {
+                        Text(text = "No favorite foods found")
+                    }
+                    else -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize().weight(1f).padding(bottom = paddingValues.calculateBottomPadding(), top = 70.dp),
+                        ) {
+                            items(state.favoriteFoods) { food ->
+                                ExpandableCard(
+                                    food = food,
+                                    onDeleted = { viewModel.deleteFavoriteFood(it.foodId) },
+                                    navController = navController
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
-    }
+    )
+
+
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun ExpandableCard(
     food: LocalFoods,
