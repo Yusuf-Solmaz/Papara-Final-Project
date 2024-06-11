@@ -1,5 +1,7 @@
 package com.yusuf.paparafinalcase
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,7 +19,9 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel by viewModels<MainViewModel>()
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
