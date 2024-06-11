@@ -26,7 +26,7 @@ class FoodScreenViewModel @Inject constructor(private val randomRecipeRepository
         getRandomFoods()
     }
 
-    fun searchRecipe(query: String, diet: String?, cuisine: String?) {
+    fun searchRecipe(query: String?, diet: String?, cuisine: String?) {
         viewModelScope.launch {
             searchRecipeRepository.searchRecipes(query, diet, cuisine).collect { result ->
                 when (result) {
