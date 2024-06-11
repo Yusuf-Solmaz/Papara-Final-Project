@@ -2,6 +2,7 @@ package com.yusuf.paparafinalcase.di
 
 import android.content.Context
 import androidx.room.Room
+import com.yusuf.paparafinalcase.data.local.dao.DailyRecommendationDao
 import com.yusuf.paparafinalcase.data.local.dao.FoodDao
 import com.yusuf.paparafinalcase.data.local.db.FoodDatabase
 import dagger.Module
@@ -19,6 +20,12 @@ object RoomModule {
     @Singleton
     fun providesFoodsDao(database: FoodDatabase): FoodDao {
         return database.foodDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesDailyRecommendationDao(database: FoodDatabase): DailyRecommendationDao {
+        return database.dailyRecommendationDao()
     }
 
     @Provides
