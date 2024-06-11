@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -92,7 +93,13 @@ fun FavoriteFoodScreen(navController: NavController, viewModel: FavoriteFoodView
                     }
                     else -> {
                         LazyColumn(
-                            modifier = Modifier.fillMaxSize().weight(1f).padding(bottom = paddingValues.calculateBottomPadding(), top = 70.dp),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(1f)
+                                .padding(
+                                    bottom = paddingValues.calculateBottomPadding(),
+                                    top = 70.dp
+                                ),
                         ) {
                             items(state.favoriteFoods) { food ->
                                 ExpandableCard(
@@ -151,8 +158,8 @@ fun ExpandableCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                
-                AsyncImage(image = food.image)
+
+                AsyncImage(image = food.image, modifier = Modifier.size(100.dp))
 
                 Text(
                     modifier = Modifier
