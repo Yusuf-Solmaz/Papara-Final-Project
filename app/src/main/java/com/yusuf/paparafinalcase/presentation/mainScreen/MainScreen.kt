@@ -42,10 +42,12 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.yusuf.paparafinalcase.R
 import com.yusuf.paparafinalcase.core.constants.Constants.categories
 import com.yusuf.paparafinalcase.core.constants.Constants.categoryImages
+import com.yusuf.paparafinalcase.data.local.model.DailyRecommendation
 import com.yusuf.paparafinalcase.presentation.components.LazyColumnRecipeItem
 import com.yusuf.paparafinalcase.presentation.components.LoadingLottie
 import com.yusuf.paparafinalcase.presentation.favoriteFoodScreen.FavoriteFoodScreen
 import com.yusuf.paparafinalcase.presentation.foodScreen.FoodScreen
+import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.DailyRecommendationState
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainRandomFoodState
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainScreenViewModel
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainSearchRecipeState
@@ -58,14 +60,15 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
     var searchQuery by remember { mutableStateOf("") }
 
     val mainSearchRecipeState by viewModel.rootMainSearchRecipeResponse.collectAsState(MainSearchRecipeState())
-    val randomFoodState by viewModel.rootRandomFoodResponse.collectAsState(MainRandomFoodState())
 
+    val dailyRecommendationState by viewModel.dailyRecommendationState.collectAsState(DailyRecommendationState())
 
     val items = listOf("Home", "Search","Favorite")
     val chosenItem = remember { mutableStateOf(0) }
 
     LaunchedEffect(key1 = true) {
         viewModel.getOneRandomFood()
+        viewModel.getDailyRecommendation()
     }
 
     Scaffold(
@@ -135,8 +138,8 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
                     } else {
                         PremiumPromotion()
                         CategorySection(navController)
-                        if (randomFoodState.rootResponse != null){
-                            Recommendations(randomFoodState,navController)
+                        if (dailyRecommendationState.recommendation != null){
+                            Recommendations(dailyRecommendationState,navController)
                         }
 
                     }
@@ -339,11 +342,11 @@ fun CategoryItem(category: String, navController: NavController, onClick: (Strin
 }
 
 @Composable
-fun Recommendations(randomFoodState:MainRandomFoodState,navController: NavController) {
-    val randomFood = randomFoodState.rootResponse!!
-    val randomRecipe = randomFood.recipes[0]
+fun Recommendations(dailyRecommendationState:DailyRecommendationState,navController: NavController) {
+    val randomFood = dailyRecommendationState.recommendation
 
-    if (randomFoodState.isLoading){
+
+    if (dailyRecommendationState.isLoading){
         Card(modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)) {
@@ -351,10 +354,12 @@ fun Recommendations(randomFoodState:MainRandomFoodState,navController: NavContro
         }
         LoadingLottie(R.raw.general_loading_lottie)
     }
-    if (randomFoodState.error != null){
-        Text(text = randomFoodState.error.toString())
+    if (dailyRecommendationState.error != null){
+        Text(text = dailyRecommendationState.error.toString())
     }
     else{
+        if (randomFood != null){
+
 
     Column {
         Text(text = "Daily Recommendation", style = MaterialTheme.typography.displaySmall)
@@ -363,7 +368,7 @@ fun Recommendations(randomFoodState:MainRandomFoodState,navController: NavContro
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
                 .clickable {
-                    navController.navigate("recipe_detail_page/${randomRecipe.id}")
+                    navController.navigate("recipe_detail_page/${randomFood.foodId}")
                 }
         ) {
             Box {
@@ -371,7 +376,7 @@ fun Recommendations(randomFoodState:MainRandomFoodState,navController: NavContro
                 val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_food_image_lottie))
 
                 SubcomposeAsyncImage(
-                    model = randomRecipe.image,
+                    model = randomFood.image,
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
@@ -395,7 +400,7 @@ fun Recommendations(randomFoodState:MainRandomFoodState,navController: NavContro
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = randomRecipe.title,
+                        text = randomFood.name,
                         color = Color.White,
                         style = TextStyle(
                             fontSize = 18.sp,
@@ -406,6 +411,8 @@ fun Recommendations(randomFoodState:MainRandomFoodState,navController: NavContro
             }
         }
     }
+        }
+
     }
 }
 
