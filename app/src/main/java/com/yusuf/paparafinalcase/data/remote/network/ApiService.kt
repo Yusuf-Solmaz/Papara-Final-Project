@@ -26,7 +26,7 @@ interface ApiService {
     @GET("recipes/complexSearch")
     suspend fun searchRecipes(
         @Query("apiKey") apiKey: String= API_KEY,
-        @Query("query") query: String,
+        @Query("query") query: String?,
         @Query("number") number: Int = 10,
         @Query("diet") diet: String?,
         @Query("cuisine") cuisine: String?
