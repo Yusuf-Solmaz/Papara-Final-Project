@@ -1,5 +1,7 @@
 package com.yusuf.paparafinalcase.di
 
+import com.yusuf.paparafinalcase.data.local.dao.DailyRecommendationDao
+import com.yusuf.paparafinalcase.data.local.repository.DailyRecommendationRepository
 import com.yusuf.paparafinalcase.data.remote.network.ApiService
 import com.yusuf.paparafinalcase.data.remote.repository.getRecipeInformations.GetRecipeInformations
 import com.yusuf.paparafinalcase.data.remote.repository.randomRecipeRepo.RandomRecipeRepository
@@ -26,6 +28,11 @@ object AppModule {
     @Provides
     fun provideGetRecipeInformation(apiService: ApiService): GetRecipeInformations {
         return GetRecipeInformations(apiService)
+    }
+
+    @Provides
+    fun provideDailyRecommendationRepository(apiService: ApiService,dao: DailyRecommendationDao): DailyRecommendationRepository {
+        return DailyRecommendationRepository(dao,apiService)
     }
 
 
