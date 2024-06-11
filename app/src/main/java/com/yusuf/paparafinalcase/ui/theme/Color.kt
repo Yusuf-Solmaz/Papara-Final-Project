@@ -10,6 +10,11 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val Orange = Color(0xFFFF9800)
+val Orange = Color(0xFFFF7D29)
+val UnSelectedBG = Color(0xFF7E7E7E)
+val OrangePass = Color(0xFFFFBF78)
 val White = Color(0xFFFFFFFF)
 val GrayOrange = Color(0xFFECD4B0)
+val BottomBarUnselectedIcon = Color(0xFF7E7E7E)
+
+val FilterButtonBG = Color(0xFFFFBF78)
