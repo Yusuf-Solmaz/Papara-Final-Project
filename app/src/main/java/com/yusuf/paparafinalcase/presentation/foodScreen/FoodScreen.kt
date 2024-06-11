@@ -106,6 +106,10 @@ fun FoodScreen(navController: NavController, category: String?, viewModel: FoodS
         Log.i("Category", "FoodScreen: $category")
     }
 
+    if (category != null){
+        viewModel.searchRecipe(query = null, diet = null, cuisine = category)
+    }
+
     if (randomFoodState.error != null) {
         Column(
             Modifier.fillMaxSize(),
@@ -197,6 +201,7 @@ fun FoodScreen(navController: NavController, category: String?, viewModel: FoodS
                                 val searchRecipe = searchResults[index]
                                 SearchFoodItem(searchRecipe) {
                                     navController.navigate("recipe_detail_page/${searchRecipe.id}")
+                                    Log.i("Search", "FoodScreen: ${searchRecipe.id}")
                                 }
                             }
                         } else {
