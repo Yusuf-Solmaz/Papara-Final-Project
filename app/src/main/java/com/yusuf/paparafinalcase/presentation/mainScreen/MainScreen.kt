@@ -40,18 +40,21 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.yusuf.paparafinalcase.R
+import com.yusuf.paparafinalcase.core.constants.Constants.APP_NAME
+import com.yusuf.paparafinalcase.core.constants.Constants.FAVORITE_SCREEN_TITLE
+import com.yusuf.paparafinalcase.core.constants.Constants.SEARCH_SCREEN_TITLE
 import com.yusuf.paparafinalcase.core.constants.Constants.categories
 import com.yusuf.paparafinalcase.core.constants.Constants.categoryImages
-import com.yusuf.paparafinalcase.data.local.model.DailyRecommendation
 import com.yusuf.paparafinalcase.presentation.components.LazyColumnRecipeItem
 import com.yusuf.paparafinalcase.presentation.components.LoadingLottie
 import com.yusuf.paparafinalcase.presentation.favoriteFoodScreen.FavoriteFoodScreen
 import com.yusuf.paparafinalcase.presentation.foodScreen.FoodScreen
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.DailyRecommendationState
-import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainRandomFoodState
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainScreenViewModel
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainSearchRecipeState
+import com.yusuf.paparafinalcase.ui.theme.BottomBarUnselectedIcon
 import com.yusuf.paparafinalcase.ui.theme.Orange
+import com.yusuf.paparafinalcase.ui.theme.UnSelectedBG
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +66,7 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
 
     val dailyRecommendationState by viewModel.dailyRecommendationState.collectAsState(DailyRecommendationState())
 
-    val items = listOf("Home", "Search","Favorite")
+    val items = listOf(APP_NAME, SEARCH_SCREEN_TITLE, FAVORITE_SCREEN_TITLE)
     val chosenItem = remember { mutableStateOf(0) }
 
     LaunchedEffect(key1 = true) {
@@ -74,9 +77,9 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
     Scaffold(
         topBar = {
             val title = when (chosenItem.value) {
-                0 -> "Food App"
-                1 -> "Search Food"
-                2 -> "Favorite Foods"
+                0 -> APP_NAME
+                1 -> SEARCH_SCREEN_TITLE
+                2 -> FAVORITE_SCREEN_TITLE
                 else -> "Food App"
             }
             TopAppBar(
@@ -154,26 +157,31 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
 
         },
         bottomBar = {
-            NavigationBar(
+            NavigationBar(containerColor =  Color.White, modifier = Modifier.height(100.dp)
             ) {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = chosenItem.value == index,
                         onClick = { chosenItem.value = index },
                         colors = NavigationBarItemDefaults.colors(
+
+                          unselectedIconColor = BottomBarUnselectedIcon,
+                          unselectedTextColor = BottomBarUnselectedIcon,
                           selectedIconColor = Orange,
                           selectedTextColor = Orange,
-                            indicatorColor = MaterialTheme.colorScheme.surfaceColorAtElevation(LocalAbsoluteTonalElevation.current)
+                          indicatorColor = Color.White
                         ),
                         icon = {
                             when(item){
-                                "Home" -> {Icon(painter = painterResource(id = R.drawable.home), contentDescription = null)}
-                                "Search" -> {Icon(painter = painterResource(id = R.drawable.search), contentDescription = null)}
-                                "Favorite" -> {Icon(painter = painterResource(id = R.drawable.favorite), contentDescription = null)}
+                                APP_NAME -> {Icon(painter = painterResource(id = R.drawable.home), contentDescription = null)}
+                                SEARCH_SCREEN_TITLE -> {Icon(painter = painterResource(id = R.drawable.search), contentDescription = null)}
+                                FAVORITE_SCREEN_TITLE -> {Icon(painter = painterResource(id = R.drawable.favorite), contentDescription = null)}
                             }
 
                         },
-                        label = { Text(item) }
+                        label = {
+                            if (item == APP_NAME){ Text("Home")} else Text(text = item)
+                        }
 
                     )
                 }
@@ -204,10 +212,9 @@ fun SearchBar(
             onValueChange(it)
             onSearching()
         },
-        placeholder = { Text(text = "Search your recipes") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         leadingIcon = {
-            Icon(imageVector = Icons.Default.Search, contentDescription = null)
+            Icon(imageVector = Icons.Default.Search, contentDescription = "")
         },
         trailingIcon = {
             if (isSearching) {
@@ -227,7 +234,17 @@ fun SearchBar(
                 if (it.isFocused) {
                     onSearchClicked()
                 }
-            }
+            },
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedLeadingIconColor = Orange,
+            focusedLeadingIconColor = Orange,
+            disabledBorderColor = Orange,
+            focusedBorderColor = Orange,
+            unfocusedBorderColor = UnSelectedBG,
+            cursorColor = Orange,
+            unfocusedLabelColor = UnSelectedBG,
+            focusedLabelColor = Orange
+        )
     )
 }
 
@@ -271,7 +288,7 @@ fun PremiumPromotion() {
                     color = Color.White
                 )
                 Button(
-                    onClick = { /* TODO: Handle click */ },
+                    onClick = {  },
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
                     Text(text = "Start 7-day FREE Trial")
@@ -292,7 +309,6 @@ fun CategorySection(navController: NavController) {
             items(categories.size) { index ->
                 CategoryItem(
                     category = categories[index],
-                    navController = navController,
                     onClick = { categoryName ->
                         navController.navigate("food_screen/$categoryName")
                     }
@@ -304,7 +320,7 @@ fun CategorySection(navController: NavController) {
 
 
 @Composable
-fun CategoryItem(category: String, navController: NavController, onClick: (String) -> Unit) {
+fun CategoryItem(category: String, onClick: (String) -> Unit) {
     val imageRes = categoryImages[category] ?: R.drawable.trial_bg
 
     Card(
