@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yusuf.paparafinalcase.core.rootResult.RootResult
+import com.yusuf.paparafinalcase.data.local.repository.DailyRecommendationRepository
 import com.yusuf.paparafinalcase.data.remote.repository.randomRecipeRepo.RandomRecipeRepository
 import com.yusuf.paparafinalcase.data.remote.repository.searchRecipeRepository.SearchRecipeRepository
 import com.yusuf.paparafinalcase.presentation.foodScreen.viewmodel.SearchRecipeState
@@ -15,13 +16,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(private val searchRecipeRepository: SearchRecipeRepository,val randomRecipeRepository: RandomRecipeRepository) : ViewModel() {
+class MainScreenViewModel @Inject constructor(
+    private val searchRecipeRepository: SearchRecipeRepository,
+    val randomRecipeRepository: RandomRecipeRepository,
+    private val dailyRecommendationRepository: DailyRecommendationRepository
+) : ViewModel() {
 
     private val _rootMainSearchRecipeResponse = MutableStateFlow(MainSearchRecipeState())
     val rootMainSearchRecipeResponse: Flow<MainSearchRecipeState> = _rootMainSearchRecipeResponse
 
     private val _rootRandomFoodResponse = MutableStateFlow(MainRandomFoodState())
     val rootRandomFoodResponse: Flow<MainRandomFoodState> = _rootRandomFoodResponse
+
+    private val _dailyRecommendationState = MutableStateFlow(DailyRecommendationState())
+    val dailyRecommendationState: Flow<DailyRecommendationState> = _dailyRecommendationState
+
 
     fun searchRecipe(query: String, diet: String?, cuisine: String?) {
         viewModelScope.launch {
@@ -97,4 +106,17 @@ class MainScreenViewModel @Inject constructor(private val searchRecipeRepository
         }
     }
 
+    fun getDailyRecommendation() {
+        viewModelScope.launch {
+            dailyRecommendationRepository.getDailyRecommendation().collect { recommendation ->
+                _dailyRecommendationState.update {
+                    it.copy(
+                        recommendation = recommendation,
+                        isLoading = false,
+                        error = null
+                    )
+                }
+            }
+        }
+    }
 }
