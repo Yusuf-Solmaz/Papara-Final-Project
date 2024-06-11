@@ -353,41 +353,52 @@ fun RecipeTabRow(foodState: RecipeDetailState) {
                             .fillMaxSize(),
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
+                        if (foodState.rootResponse?.cookingMinutes != 0 && foodState.rootResponse?.preparationMinutes != 0 )
+                        {
+
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                            Column(
-                                modifier = Modifier.weight(1f),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(painter = painterResource(id = R.drawable.ic_microwave), contentDescription = "", modifier = Modifier.size(50.dp))
-                                Text(
-                                    text = foodState.rootResponse?.cookingMinutes.toString(),
-                                    style = TextStyle(
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold
-                                    ),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
+
+                            if (foodState.rootResponse?.cookingMinutes != 0){
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.ic_microwave), contentDescription = "", modifier = Modifier.size(50.dp))
+                                    Text(
+                                        text = foodState.rootResponse?.cookingMinutes.toString(),
+                                        style = TextStyle(
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.Bold
+                                        ),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
                             }
-                            Column(
-                                modifier = Modifier.weight(1f),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(painter = painterResource(id = R.drawable.clock), contentDescription = "", modifier = Modifier.size(50.dp))
-                                Text(
-                                    text = foodState.rootResponse?.preparationMinutes.toString(),
-                                    style = TextStyle(
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold
-                                    ),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
+
+                            if (foodState.rootResponse?.preparationMinutes != 0){
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(painter = painterResource(id = R.drawable.clock), contentDescription = "", modifier = Modifier.size(50.dp))
+                                    Text(
+                                        text = foodState.rootResponse?.preparationMinutes.toString(),
+                                        style = TextStyle(
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.Bold
+                                        ),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
                             }
+
                         }
 
+                        }
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                             Column(
                                 modifier = Modifier.weight(1f),
