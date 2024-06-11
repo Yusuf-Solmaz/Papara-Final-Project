@@ -19,4 +19,9 @@ object Constants {
         "Japanese" to R.drawable.japanese,
         "Mexican" to R.drawable.mexican
     )
+
+    const val APP_NAME = "Sweet Whispers"
+    const val SEARCH_SCREEN_TITLE = "Search"
+    const val FAVORITE_SCREEN_TITLE = "Favorites"
+
 }
