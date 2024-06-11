@@ -12,7 +12,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
-fun LoadingLottie(resId:Int, height: Dp = 200.dp){
+fun LoadingLottie(resId:Int, height: Dp = 300.dp){
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(resId))
     LottieAnimation(
         composition = composition,
