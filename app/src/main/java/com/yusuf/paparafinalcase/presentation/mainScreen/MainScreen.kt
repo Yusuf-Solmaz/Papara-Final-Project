@@ -30,6 +30,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -83,10 +85,16 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
                 else -> "Food App"
             }
             TopAppBar(
-                title = { Text(text = title) },
+                title = { Text(text = title, style = TextStyle(
+                    color = Orange,
+                    fontFamily = FontFamily(Font(R.font.onboarding_title1)),
+                    fontSize = 20.sp
+                )) },
                 actions = {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.AccountCircle, contentDescription = null)
+                    IconButton(onClick = {}, colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = Orange
+                    )) {
+                        Icon(Icons.Default.AccountCircle,contentDescription = null)
                     }
                 }
             )
