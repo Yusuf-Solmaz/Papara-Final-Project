@@ -89,12 +89,25 @@ fun RecipeDetailScreen(navController: NavController,recipeId: Int, viewModel: Re
         Log.d("RecipeDetailScreen", "LaunchedEffect: $recipeId")
     }
     if (foodState.isLoading){
-       LoadingLottie(resId = R.raw.general_loading_lottie)
+       Column(
+           Modifier.fillMaxSize(),
+           verticalArrangement = Arrangement.Center,
+           horizontalAlignment = Alignment.CenterHorizontally
+       ) {
+
+       }
+        LoadingLottie(resId = R.raw.general_loading_lottie)
     }
     if (foodState.error != null){
-        Text(
-            foodState.error ?: "",
-        )
+        Column(
+            Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                foodState.error ?: "",
+            )
+        }
     }
     else{
 
@@ -117,9 +130,13 @@ fun RecipeDetailScreen(navController: NavController,recipeId: Int, viewModel: Re
                                 tint = Color.Red,
                                 painter = painterResource(id = if (isFavorite) R.drawable.fav_food else R.drawable.not_fav_food),
                                 contentDescription = null,
-                                modifier = Modifier.padding(end = 10.dp, start = 10.dp).clickable {
-                                    foodState.rootResponse?.toLocalFoods()?.let { viewModel.addOrRemoveFavorite(it) }
-                                }
+                                modifier = Modifier
+                                    .padding(end = 10.dp, start = 10.dp)
+                                    .clickable {
+                                        foodState.rootResponse
+                                            ?.toLocalFoods()
+                                            ?.let { viewModel.addOrRemoveFavorite(it) }
+                                    }
                             )
                         }
                     }

@@ -10,7 +10,6 @@ import com.yusuf.paparafinalcase.data.local.model.LocalFoods
 import com.yusuf.paparafinalcase.data.mapper.toRecipeInfoRoot
 import com.yusuf.paparafinalcase.data.remote.repository.getRecipeInformations.GetRecipeInformations
 import com.yusuf.paparafinalcase.data.remote.responses.recipe.AnalyzedInstruction
-import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainRandomFoodState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow

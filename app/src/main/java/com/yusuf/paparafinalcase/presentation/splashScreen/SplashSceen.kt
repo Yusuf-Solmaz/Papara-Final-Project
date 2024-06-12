@@ -26,7 +26,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.yusuf.paparafinalcase.R
 import com.yusuf.paparafinalcase.core.constants.Constants.APP_NAME
 import com.yusuf.paparafinalcase.ui.theme.Orange
@@ -52,14 +56,18 @@ fun SplashScreen() {
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_splash),
             contentDescription = null,
             modifier = Modifier
-                .size(100.dp)
+                .size(170.dp)
                 .graphicsLayer(rotationZ = rotation)
 
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Text(text = APP_NAME)
+        Text(text = APP_NAME, style = TextStyle(
+            fontFamily = FontFamily(Font(R.font.splash_title_font)),
+            fontSize = 50.sp,
+            color = White
+        ))
     }
 
 }
