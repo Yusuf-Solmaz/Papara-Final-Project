@@ -154,7 +154,6 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
                         if (dailyRecommendationState.recommendation != null){
                             Recommendations(dailyRecommendationState,navController)
                         }
-
                     }
                 }
             }
@@ -164,22 +163,19 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
             if (chosenItem.value == 2){
                 FavoriteFoodScreen(navController)
             }
-
         },
         bottomBar = {
-            NavigationBar(containerColor =  Color.White, modifier = Modifier.height(100.dp)
-            ) {
+            NavigationBar(containerColor =  Color.White, modifier = Modifier.height(100.dp)) {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = chosenItem.value == index,
                         onClick = { chosenItem.value = index },
                         colors = NavigationBarItemDefaults.colors(
-
-                          unselectedIconColor = BottomBarUnselectedIcon,
-                          unselectedTextColor = BottomBarUnselectedIcon,
-                          selectedIconColor = Orange,
-                          selectedTextColor = Orange,
-                          indicatorColor = Color.White
+                            unselectedIconColor = BottomBarUnselectedIcon,
+                            unselectedTextColor = BottomBarUnselectedIcon,
+                            selectedIconColor = Orange,
+                            selectedTextColor = Orange,
+                            indicatorColor = Color.White
                         ),
                         icon = {
                             when(item){
@@ -187,12 +183,10 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
                                 SEARCH_SCREEN_TITLE -> {Icon(painter = painterResource(id = R.drawable.search), contentDescription = null)}
                                 FAVORITE_SCREEN_TITLE -> {Icon(painter = painterResource(id = R.drawable.favorite), contentDescription = null)}
                             }
-
                         },
                         label = {
                             if (item == APP_NAME){ Text("Home")} else Text(text = item)
                         }
-
                     )
                 }
             }
@@ -413,64 +407,63 @@ fun Recommendations(dailyRecommendationState:DailyRecommendationState,navControl
         if (randomFood != null){
 
 
-    Column {
-        Text(text = "Daily Recommendation", style = TextStyle(
-            fontSize = 25.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily(Font(R.font.oxygen)),
-            color = Orange
-        ))
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .clickable {
-                    navController.navigate("recipe_detail_page/${randomFood.foodId}")
-                }
-        ) {
-            Box {
-
-                val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_food_image_lottie))
-
-                SubcomposeAsyncImage(
-                    model = randomFood.image,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
-                    loading = {
-                        LottieAnimation(
-                            composition,
-                            modifier = Modifier.size(100.dp),
-                            iterations = Int.MAX_VALUE
-                        )
-                    }
-                )
-                Box(
+            Column {
+                Text(text = "Daily Recommendation", style = TextStyle(
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily(Font(R.font.oxygen)),
+                    color = Orange
+                ))
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.3f))
-                )
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .clickable {
+                            navController.navigate("recipe_detail_page/${randomFood.foodId}")
+                        }
                 ) {
-                    Text(
-                        text = randomFood.name,
-                        color = Color.White,
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            color = Color.White
+                    Box {
+
+                        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_food_image_lottie))
+
+                        SubcomposeAsyncImage(
+                            model = randomFood.image,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop,
+                            loading = {
+                                LottieAnimation(
+                                    composition,
+                                    modifier = Modifier.size(100.dp),
+                                    iterations = Int.MAX_VALUE
+                                )
+                            }
                         )
-                    )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Black.copy(alpha = 0.3f))
+                        )
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp)
+                        ) {
+                            Text(
+                                text = randomFood.name,
+                                color = Color.White,
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    color = Color.White
+                                )
+                            )
+                        }
+                    }
                 }
             }
-        }
-    }
         }
 
     }
 }
-
 
