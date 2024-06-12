@@ -1,7 +1,6 @@
 package com.yusuf.paparafinalcase.presentation.foodScreen
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,30 +8,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -45,15 +37,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,6 +47,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.yusuf.paparafinalcase.R
+import com.yusuf.paparafinalcase.core.constants.Constants.supportedCuisines
+import com.yusuf.paparafinalcase.core.constants.Constants.supportedDiets
 import com.yusuf.paparafinalcase.data.remote.responses.recipe.Recipe
 import com.yusuf.paparafinalcase.data.remote.responses.searchRecipe.Result
 import com.yusuf.paparafinalcase.presentation.components.LazyColumnRecipeItem
@@ -80,17 +68,7 @@ fun FoodScreen(navController: NavController, category: String?, viewModel: FoodS
     val randomFoodState by viewModel.rootRandomFoodResponse.collectAsState(RandomFoodState())
     val searchRecipeState by viewModel.rootSearchRecipeResponse.collectAsState(SearchRecipeState())
 
-    val supportedCuisines = listOf(
-        "African", "Asian", "American", "British", "Cajun", "Caribbean", "Chinese",
-        "Eastern European", "European", "French", "German", "Greek", "Indian", "Irish",
-        "Italian", "Japanese", "Jewish", "Korean", "Latin American", "Mediterranean",
-        "Mexican", "Middle Eastern", "Nordic", "Southern", "Spanish", "Thai", "Vietnamese"
-    )
 
-    val supportedDiets = listOf(
-        "Gluten Free", "Ketogenic", "Vegetarian", "Lacto-Vegetarian", "Ovo-Vegetarian",
-        "Vegan", "Pescetarian", "Paleo", "Primal", "Low FODMAP", "Whole30"
-    )
 
     var isCuisineDropdownOpen by remember { mutableStateOf(false) }
     var isDietDropdownOpen by remember { mutableStateOf(false) }

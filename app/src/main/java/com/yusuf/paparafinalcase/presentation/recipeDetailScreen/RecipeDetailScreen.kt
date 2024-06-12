@@ -3,7 +3,6 @@ package com.yusuf.paparafinalcase.presentation.recipeDetailScreen
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +25,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -49,32 +46,26 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberImagePainter
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.yusuf.paparafinalcase.R
 import com.yusuf.paparafinalcase.data.mapper.toLocalFoods
 import com.yusuf.paparafinalcase.data.remote.responses.recipe.ExtendedIngredient
-import com.yusuf.paparafinalcase.data.remote.responses.recipe.Ingredient
-import com.yusuf.paparafinalcase.presentation.components.AsyncImage
 import com.yusuf.paparafinalcase.presentation.components.LoadingLottie
 import com.yusuf.paparafinalcase.presentation.recipeDetailScreen.viewmodel.RecipeDetailState
 import com.yusuf.paparafinalcase.presentation.recipeDetailScreen.viewmodel.RecipeDetailViewModel
 import com.yusuf.paparafinalcase.ui.theme.Orange
-import com.yusuf.paparafinalcase.ui.theme.PaparaFinalCaseTheme
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -292,7 +283,7 @@ fun IngredientItem(ingredient: ExtendedIngredient) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_bullet),  // Ensure you have a bullet icon resource
+            painter = painterResource(id = R.drawable.ic_bullet),
             contentDescription = null,
             modifier = Modifier.size(8.dp)
         )

@@ -1,15 +1,9 @@
 package com.yusuf.paparafinalcase.data.local.repository
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import androidx.core.app.NotificationCompat
-import com.yusuf.paparafinalcase.R
 import com.yusuf.paparafinalcase.core.constants.utils.notification.NotificationHelper.showNotification
 import com.yusuf.paparafinalcase.data.local.dao.DailyRecommendationDao
 import com.yusuf.paparafinalcase.data.local.model.DailyRecommendation
-import com.yusuf.paparafinalcase.data.mapper.toJsonString
-import com.yusuf.paparafinalcase.data.mapper.toLocalFoods
 import com.yusuf.paparafinalcase.data.remote.network.ApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -24,8 +18,11 @@ class DailyRecommendationRepository @Inject constructor(
 
     suspend fun getDailyRecommendation(): Flow<DailyRecommendation?> {
         val recommendation = dailyRecommendationDao.getDailyRecommendation().first()
+
         return if (recommendation == null || isOlderThan24Hours(recommendation.timestamp)) {
+
             val response = foodApi.getRandomRecipes(number = 1)
+
             val randomRecipe = response.body()?.recipes?.first() ?: return dailyRecommendationDao.getDailyRecommendation()
             val newRecommendation = DailyRecommendation(
 

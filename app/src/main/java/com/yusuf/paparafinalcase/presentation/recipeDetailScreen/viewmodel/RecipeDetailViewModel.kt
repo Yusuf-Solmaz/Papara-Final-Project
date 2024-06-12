@@ -12,6 +12,7 @@ import com.yusuf.paparafinalcase.data.remote.repository.getRecipeInformations.Ge
 import com.yusuf.paparafinalcase.data.remote.responses.recipe.AnalyzedInstruction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -83,13 +84,13 @@ class RecipeDetailViewModel @Inject constructor(val repository: GetRecipeInforma
     }
 
     private fun checkIfFavorite(foodId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _isFavorite.value = foodDao.isFoodInFavorites(foodId) > 0
         }
     }
 
     fun addOrRemoveFavorite(food: LocalFoods) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (_isFavorite.value) {
                 foodDao.deleteFood(food.foodId)
             } else {
@@ -100,7 +101,7 @@ class RecipeDetailViewModel @Inject constructor(val repository: GetRecipeInforma
     }
 
     private fun fetchRecipeFromDatabase(foodId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val food = foodDao.getFoodById(foodId)
             if (food != null) {
                 _rootRecipeInformationResponse.update {

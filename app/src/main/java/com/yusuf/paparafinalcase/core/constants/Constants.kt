@@ -24,4 +24,15 @@ object Constants {
     const val SEARCH_SCREEN_TITLE = "Search"
     const val FAVORITE_SCREEN_TITLE = "Favorites"
 
+    val supportedCuisines = listOf(
+        "African", "Asian", "American", "British", "Cajun", "Caribbean", "Chinese",
+        "Eastern European", "European", "French", "German", "Greek", "Indian", "Irish",
+        "Italian", "Japanese", "Jewish", "Korean", "Latin American", "Mediterranean",
+        "Mexican", "Middle Eastern", "Nordic", "Southern", "Spanish", "Thai", "Vietnamese"
+    )
+
+    val supportedDiets = listOf(
+        "Gluten Free", "Ketogenic", "Vegetarian", "Lacto-Vegetarian", "Ovo-Vegetarian",
+        "Vegan", "Pescetarian", "Paleo", "Primal", "Low FODMAP", "Whole30"
+    )
 }

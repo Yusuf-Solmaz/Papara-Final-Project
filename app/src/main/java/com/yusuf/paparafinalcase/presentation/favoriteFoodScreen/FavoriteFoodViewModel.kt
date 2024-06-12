@@ -2,13 +2,11 @@ package com.yusuf.paparafinalcase.presentation.favoriteFoodScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yusuf.paparafinalcase.core.rootResult.RootResult
 import com.yusuf.paparafinalcase.data.local.dao.FoodDao
-import com.yusuf.paparafinalcase.data.local.model.LocalFoods
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +22,7 @@ class FavoriteFoodViewModel @Inject constructor(private val foodDao: FoodDao) : 
     }
 
     private fun fetchFavoriteFoods() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _favoriteFoodsState.update { it.copy(isLoading = true, error = null) }
             try {
                 foodDao.getFoods().collect { favoriteFoods ->
@@ -41,7 +39,7 @@ class FavoriteFoodViewModel @Inject constructor(private val foodDao: FoodDao) : 
     }
 
     fun deleteFavoriteFood(foodId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 foodDao.deleteFood(foodId)
                 fetchFavoriteFoods()

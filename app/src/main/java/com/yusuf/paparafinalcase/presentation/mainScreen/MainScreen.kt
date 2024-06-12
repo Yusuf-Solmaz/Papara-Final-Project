@@ -74,7 +74,6 @@ fun MainScreen(navController: NavController, viewModel: MainScreenViewModel = hi
     val chosenItem = remember { mutableStateOf(0) }
 
     LaunchedEffect(key1 = true) {
-        viewModel.getOneRandomFood()
         viewModel.getDailyRecommendation()
     }
 
