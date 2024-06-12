@@ -17,5 +17,4 @@ val OrangePass = Color(0xFFFFBF78)
 val White = Color(0xFFFFFFFF)
 val GrayOrange = Color(0xFFECD4B0)
 val BottomBarUnselectedIcon = Color(0xFF7E7E7E)
-
-val FilterButtonBG = Color(0xFFFFBF78)
+val FavoriteFoodViewDetailBtnBG = Color(0xFFF1660B)
