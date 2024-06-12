@@ -2,7 +2,7 @@
 
 ## Introduction 
 --------------------------------
-* This application is the final project of Patika&Papara Android (Kotlin&Compose) Bootcamp.
+* _This application is the final project of Patika&Papara Android (Kotlin&Compose) Bootcamp._
 
 * Sweet Whispers is a recipe app with many features such as food search and recipe learning. Within the app you can search by the name of the dish, the cuisines of the dish or the type of diet. Sweet Whispers will suggest you a dish on a daily basis and notify you with a notification. When looking at the recipe, you can find the instructions, ingredients, and more details. You can also save a dish you like to favorites and look at your favorite recipes later, even when you are offline. In short, Sweet Whispers is the only food app you'll ever need. 
 
