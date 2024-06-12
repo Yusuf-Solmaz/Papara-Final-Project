@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -62,6 +63,7 @@ import com.yusuf.paparafinalcase.R
 import com.yusuf.paparafinalcase.data.local.model.LocalFoods
 import com.yusuf.paparafinalcase.presentation.components.AsyncImage
 import com.yusuf.paparafinalcase.presentation.components.LoadingLottie
+import com.yusuf.paparafinalcase.ui.theme.FavoriteFoodViewDetailBtnBG
 import com.yusuf.paparafinalcase.ui.theme.GrayOrange
 import com.yusuf.paparafinalcase.ui.theme.Orange
 import com.yusuf.paparafinalcase.ui.theme.White
@@ -201,7 +203,9 @@ fun ExpandableCard(
                         onDeleted = onDeleted
                     )
                     
-                    Button(onClick = {
+                    Button(colors = ButtonDefaults.buttonColors(
+                        containerColor  = FavoriteFoodViewDetailBtnBG,
+                    ),onClick = {
                         navController.navigate("recipe_detail_page/${food.foodId}")
                     }) {
                         Text(text = "View All Details")
