@@ -108,10 +108,8 @@ dependencies {
 
     implementation(libs.coil.compose)
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.androidx.datastore.preferences)
 
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.androidx.core.splashscreen)
 
-    implementation ("androidx.paging:paging-compose:3.3.0-alpha02")
-    implementation("androidx.paging:paging-runtime:3.3.0-alpha02")
 }
