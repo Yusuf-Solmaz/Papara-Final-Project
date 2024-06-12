@@ -31,6 +31,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -115,8 +116,29 @@ fun RecipeDetailScreen(navController: NavController,recipeId: Int, viewModel: Re
             topBar = {
                 TopAppBar(
                     title = {
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                             Text(text = foodState.rootResponse?.title ?: "")
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(onClick = {
+                                navController.navigate("main_screen")
+
+                            }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_arrow_back),
+                                    contentDescription = "Back"
+                                )
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(text = foodState.rootResponse?.title ?: "",
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                                )
+                            Spacer(modifier = Modifier.weight(1f))
                         }
                     },
                     actions = {

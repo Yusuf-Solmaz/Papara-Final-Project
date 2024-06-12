@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,6 +57,7 @@ import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainScreenVie
 import com.yusuf.paparafinalcase.presentation.mainScreen.viewmodel.MainSearchRecipeState
 import com.yusuf.paparafinalcase.ui.theme.BottomBarUnselectedIcon
 import com.yusuf.paparafinalcase.ui.theme.Orange
+import com.yusuf.paparafinalcase.ui.theme.PremiumBtnBG
 import com.yusuf.paparafinalcase.ui.theme.UnSelectedBG
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -213,7 +215,10 @@ fun SearchBar(
     val focusManager = LocalFocusManager.current
 
     OutlinedTextField(
-        label = { Text(text = label) },
+        label = { Text(text = label, style = TextStyle(
+            fontFamily = FontFamily(Font(R.font.onboarding_content)),
+            fontSize = 16.sp
+        )) },
         value = textValue,
         onValueChange = {
             textValue = it
@@ -288,14 +293,26 @@ fun PremiumPromotion() {
             ) {
                 Text(
                     text = "Go to premium now!",
-                    style = MaterialTheme.typography.displaySmall,
+                    style = TextStyle(
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
                     color = Color.White
                 )
+                Spacer(modifier = Modifier.size(30.dp))
                 Text(
                     text = "Get access to all the amazing recipes from the world",
-                    color = Color.White
+                    style = TextStyle(
+                        fontSize = 17.sp,
+                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                        color = Color.White
+                    )
                 )
                 Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = PremiumBtnBG,
+                        contentColor = Color.White
+                    ),
                     onClick = {  },
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
@@ -309,7 +326,15 @@ fun PremiumPromotion() {
 @Composable
 fun CategorySection(navController: NavController) {
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
-        Text(text = "Category", style = MaterialTheme.typography.displaySmall)
+        Box(modifier = Modifier.padding(bottom = 5.dp)){
+            Text(text = "Category", style = TextStyle(
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily(Font(R.font.oxygen)),
+                color = Orange
+            ))
+        }
+
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -358,7 +383,10 @@ fun CategoryItem(category: String, onClick: (String) -> Unit) {
                 Text(
                     text = category,
                     color = Color.White,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = TextStyle(
+                        fontSize = 17.sp,
+                        color = Color.White
+                    )
                 )
             }
         }
@@ -386,7 +414,12 @@ fun Recommendations(dailyRecommendationState:DailyRecommendationState,navControl
 
 
     Column {
-        Text(text = "Daily Recommendation", style = MaterialTheme.typography.displaySmall)
+        Text(text = "Daily Recommendation", style = TextStyle(
+            fontSize = 25.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily(Font(R.font.oxygen)),
+            color = Orange
+        ))
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -427,7 +460,7 @@ fun Recommendations(dailyRecommendationState:DailyRecommendationState,navControl
                         text = randomFood.name,
                         color = Color.White,
                         style = TextStyle(
-                            fontSize = 18.sp,
+                            fontSize = 20.sp,
                             color = Color.White
                         )
                     )
