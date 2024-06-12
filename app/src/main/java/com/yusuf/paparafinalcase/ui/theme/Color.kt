@@ -11,6 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val Orange = Color(0xFFFF7D29)
+val PremiumBtnBG = Color(0xFFFF6300)
 val UnSelectedBG = Color(0xFF7E7E7E)
 val OrangePass = Color(0xFFFFBF78)
 val White = Color(0xFFFFFFFF)
