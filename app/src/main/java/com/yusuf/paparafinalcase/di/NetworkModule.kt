@@ -1,6 +1,6 @@
 package com.yusuf.paparafinalcase.di
 
-import com.yusuf.paparafinalcase.core.constants.ApiUtils.BASE_URL
+import com.yusuf.paparafinalcase.BuildConfig
 import com.yusuf.paparafinalcase.data.remote.network.ApiService
 import dagger.Module
 import dagger.Provides
@@ -19,7 +19,7 @@ object NetworkModule {
     fun provideRetrofitClient(): Retrofit {
         return Retrofit
             .Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
