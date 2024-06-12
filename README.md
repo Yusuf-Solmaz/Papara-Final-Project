@@ -28,12 +28,11 @@
 * [Flow](https://developer.android.com/kotlin/flow)
 * [BuildConfig](https://developer.android.com/reference/androidx/media3/cast/BuildConfig)
 
-  ## API Used
-
+## API Used
 --------------------------------
 * _api.spoonacular.com_
 
-  ## Screens
+## Screens
 --------------------------------
 
   <table>
