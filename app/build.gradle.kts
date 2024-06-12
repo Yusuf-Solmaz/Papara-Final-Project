@@ -1,3 +1,7 @@
+import java.util.Properties
+import java.io.File
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,6 +9,7 @@ plugins {
     alias(libs.plugins.hilt.plugin)
 
 }
+
 
 android {
     namespace = "com.yusuf.paparafinalcase"
@@ -21,6 +26,17 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+
+        val properties = Properties()
+        val localPropertiesFile = File("local.properties")
+        if (localPropertiesFile.exists()) {
+            FileInputStream(localPropertiesFile).use { input ->
+                properties.load(input)
+            }
+        }
+        buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY")}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
     }
 
     buildTypes {
@@ -41,6 +57,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.11"
@@ -94,4 +111,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    implementation ("androidx.paging:paging-compose:3.3.0-alpha02")
+    implementation("androidx.paging:paging-runtime:3.3.0-alpha02")
 }
