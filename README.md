@@ -54,7 +54,15 @@ git clone https://github.com/Yusuf-Solmaz/Papara-Final-Case-Android
 ```
 2. Open the cloned project in Android Studio.
 
-3. Build and run the app on an emulator or a physical device.
+3. If there is no `local.properties` file in the project directory, create one.
+
+4. Add the following line with your API key to `local.properties`:
+```
+API_KEY=YOUR_API_KEY_HERE
+BASE_URL=https://api.spoonacular.com/
+```
+
+6. Build and run the app on an emulator or a physical device.
 
 
 ## Contact With Me
